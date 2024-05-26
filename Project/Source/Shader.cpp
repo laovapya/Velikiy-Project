@@ -17,6 +17,9 @@ std::string get_file_contents(const char* filename)
 	throw(errno);
 }
 
+Shader::Shader() {
+	ID = -1;
+}
 // Constructor that build the Shader Program from 2 different shaders
 Shader::Shader(const char* vertexFile, const char* fragmentFile)
 {
@@ -60,6 +63,16 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 		std::cout << "Failed to find matrix uniform" << std::endl;
 		return;
 	}
+	colorLoc = glGetUniformLocation(ID, "color");
+	if (colorLoc == -1) {
+		std::cout << "Failed to find color uniform" << std::endl;
+		return;
+	}
+	alphaLoc = glGetUniformLocation(ID, "alpha");
+	if (alphaLoc == -1) {
+		std::cout << "Failed to find alpha uniform" << std::endl;
+		return;
+	}
 
 }
 
@@ -78,4 +91,10 @@ void Shader::Delete()
 void Shader::SetMatrix(glm::mat4 matrix) {
 	glUniformMatrix4fv(matrixLoc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
-
+void Shader::SetColor(glm::vec3 color) {
+	glUniform3f(colorLoc, color.x, color.y, color.z);
+}
+void Shader::SetAlpha(float alpha) {
+	glUniform1f(alphaLoc, alpha);
+}
+//0.2f, 0.4f, 0.8f

@@ -5,8 +5,6 @@ Cube::Cube() {
 	
 }
 
-
-
 void Cube::Bind() {
 	VertexData::GetCubeVAO().Bind();
 }
