@@ -25,6 +25,10 @@ public:
     vec3 operator-(const vec3& v) const {
         return vec3(a - v.a, b - v.b, c - v.c);
     }
+
+    vec3 operator*(float sc) const {
+        return vec3(a * sc, b * sc, c * sc);
+    }
 };
 
 inline float length(const vec3& v) {
@@ -170,7 +174,7 @@ public:
         return res;
     }
             
-    static mat4 multiply(const mat4& m1, const mat4& m2) {
+    friend mat4 operator*(const mat4& m1, const mat4& m2) {
         mat4 res;
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
@@ -180,8 +184,8 @@ public:
                 }
             }
         }
-        return res;
-    }
+    return res;
+}
 
     static mat4 translation(const vec3& v) {
         mat4 res;
