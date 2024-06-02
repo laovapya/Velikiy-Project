@@ -2,7 +2,6 @@
 #define GLM_H
 #include <iostream>
 #include <cmath>
-#include <stdexcept>
 
 class vec3 {
 public:
@@ -51,6 +50,10 @@ inline vec3 cross(const vec3& v1, const vec3& v2) {
         v1.c * v2.a - v1.a * v2.c,
         v1.a * v2.b - v1.b * v2.a
     );
+}
+
+inline float radians(float deg) {
+    return deg * static_cast<float>(M_PI) / 180.0f;
 }
 
 class mat4 {
@@ -117,10 +120,74 @@ public:
         }
         return res;
     }
-};
 
-inline float radians(float deg) {
-    return deg * static_cast<float>(M_PI) / 180.0f;
-}
+    static mat4 translation(const vec3& v) {
+        mat4 res;
+        res[0][0] = 1.0f;
+        res[1][1] = 1.0f;
+        res[2][2] = 1.0f;
+        res[3][3] = 1.0f;
+        res[3][0] = v.a;
+        res[3][1] = v.b;
+        res[3][2] = v.c;
+        return res;
+    }
+
+    static mat4 rotation_X(float ang) {
+        float rad = radians(ang);
+        float cos_pi = std::cos(rad);
+        float sin_pi = std::sin(rad);
+
+        mat4 res;
+        res[0][0] = 1.0f;
+        res[1][1] = cos_pi;
+        res[1][2] = -sin_pi;
+        res[2][1] = sin_pi;
+        res[2][2] = cos_pi;
+        res[3][3] = 1.0f;
+        return res;
+    }
+
+    static mat4 rotation_Y(float ang) {
+        mat4 res;
+        float rad = radians(ang);
+        float sin_pi = std::sin(rad);
+        float cos_pi = std::cos(rad);
+        
+        res[0][0] = res[2][2] = cos_pi;
+        res[0][2] = sin_pi;
+        res[2][0] = -sin_pi;
+        res[1][1] = 1.0f;
+        res[3][3] = 1.0f;
+        
+        return res;
+    }
+
+    static mat4 rotation_Z(float ang) {
+        mat4 res;
+        float rad = radians(ang);
+        float sin_pi = std::sin(rad);
+        float cos_pi = std::cos(rad);
+        
+        res[0][0] = res[1][1] = cos_pi;
+        res[0][1] = -sin_pi;
+        res[1][0] = sin_pi;
+        res[2][2] = 1.0f;
+        res[3][3] = 1.0f;
+        
+        return res;
+    }
+
+    static mat4 scale(const vec3& v1) {
+        mat4 res;
+        
+        res[0][0] = v1.a;
+        res[1][1] = v1.b;
+        res[2][2] = v1.c;
+        res[3][3] = 1.0f;
+        
+        return res;
+    }
+};
 
 #endif 
