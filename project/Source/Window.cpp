@@ -38,7 +38,7 @@ void Window::CreateWindow() {
 	window = glfwCreateWindow(width, height, appName, NULL, NULL);
 	if (window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		//std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return;
 	}
@@ -49,13 +49,12 @@ void Window::CreateWindow() {
 void Window::InitGlad() {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		//std::cout << "Failed to initialize GLAD" << std::endl;
 		return;
 	}
 }
 
 void Window::SetWindowParameters() {
-
 	glViewport(lowerLeft.x, lowerLeft.y, upperRight.x, upperRight.y);
 
 	glEnable(GL_BLEND);
@@ -103,9 +102,6 @@ void Window::InitImGui() {
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	//aspectRatio = ((upperRight.x - lowerLeft.x) * width) / ((upperRight.y - lowerLeft.y) * height);
-	
-	//lowerLeft = glm::vec2(yDownOffset, 0);
 	upperRight = glm::vec2(width - XRightOffset, height);
 	aspectRatio = ((upperRight.x - lowerLeft.x)) / ((upperRight.y));
 	glViewport(lowerLeft.x, lowerLeft.y, upperRight.x, upperRight.y);

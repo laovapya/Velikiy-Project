@@ -122,7 +122,7 @@ glm::mat4 Shape::GetObjectMatrix(Shape* object) { //move to Shape
 }
 
 int Shape::GetIndexCount() {
-	return vertexCount;
+	return indexCount;
 }
 
 glm::vec3 Shape::GetColor() {

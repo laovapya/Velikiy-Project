@@ -266,7 +266,7 @@ VAO VertexData::GetZVAO() {
 VAO VertexData::GetGridVAO() {
 	return GetInstance().grid;
 }
-int VertexData::GetGridVertexCount() {
+int VertexData::GetGridIndexCount() {
 	return max_grid_size;
 }
 

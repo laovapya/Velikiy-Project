@@ -2,7 +2,7 @@
 #include"VertexData.h"
 
 Sphere::Sphere() : Shape() {
-	vertexCount = VertexData::GetSphereIndexCount();
+	indexCount = VertexData::GetSphereIndexCount();
 	shape = sphere;
 }
 VAO Sphere::GetVAO() {

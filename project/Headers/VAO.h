@@ -2,7 +2,7 @@
 #include<glad/glad.h>
 #include"VBO.h"
 #include"EBO.h"
-
+//vertex array object is used by openGL to store VBO and EBO in one object, so it is easier to bind it.
 class VAO
 {
 public:

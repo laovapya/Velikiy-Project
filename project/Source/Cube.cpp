@@ -3,7 +3,7 @@
 
 Cube::Cube() : Shape() {
 	
-	vertexCount = VertexData::GetCubeIndexCount();
+	indexCount = VertexData::GetCubeIndexCount();
 	shape = cube;
 }
 

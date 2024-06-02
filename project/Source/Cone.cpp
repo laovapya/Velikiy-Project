@@ -2,7 +2,7 @@
 #include"VertexData.h"
 Cone::Cone() : Shape() {
 	
-	vertexCount = VertexData::GetConeIndexCount();
+	indexCount = VertexData::GetConeIndexCount();
 	shape = cone;
 }
 

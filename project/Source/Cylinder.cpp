@@ -1,7 +1,7 @@
 #include "Cylinder.h"
 Cylinder::Cylinder() : Shape() {
 
-	vertexCount = VertexData::GetCylinderIndexCount();
+	indexCount = VertexData::GetCylinderIndexCount();
 	shape = cylinder;
 }
 //int Cylinder::GetVertexCount() {

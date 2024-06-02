@@ -36,7 +36,7 @@ void Scene::DrawGrid() {
 	shaderProgram.SetAlpha(0.9f);
 	shaderProgram.SetColor(glm::vec3(0.2f, 0.2f, 0.2f));
 	VertexData::GetGridVAO().Bind();
-	glDrawArrays(GL_LINES, 0, VertexData::GetGridVertexCount());
+	glDrawArrays(GL_LINES, 0, VertexData::GetGridIndexCount());
 
 }
 
