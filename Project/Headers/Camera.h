@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm.h>
+
 class Camera
 {
 private:
@@ -10,8 +12,8 @@ private:
 
 
 	Camera();
-	glm::vec3 position = glm::vec3(0,0,-20);
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), WIDTH / HEIGHT, 0.1f, 100.0f);
+	vec3 position = vec3(0,0,-20);
+	mat4 projection = perspective(glm::radians(45.0f), WIDTH / HEIGHT, 0.1f, 100.0f);
 
 	//glm::vec3 rotation = glm::vec3(0, 0, 0);
 	//view angle
@@ -24,9 +26,9 @@ public:
 		static Camera instance;
 		return instance;
 	}
-	static glm::mat4 GetViewMatrix();
-	static glm::mat4 GetProjectionMatrix();
-	static void Translate(glm::vec3);
+	static mat4 GetViewMatrix();
+	static mat4 GetProjectionMatrix();
+	static void Translate(vec3);
 };
 
 
