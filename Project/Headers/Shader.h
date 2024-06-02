@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <Glm.h>
 
 std::string GetFileContents(const char* fileName);
 
@@ -21,7 +21,7 @@ public:
 
 	void Activate();
 	void Delete();
-	void SetMatrix(glm::mat4 matrix);
+	void SetMatrix(mat4 matrix);
 };
 
 
