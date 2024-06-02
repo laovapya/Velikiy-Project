@@ -3,15 +3,16 @@
 #include"VAO.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <Glm.h>
 #include"Controller.h"
 
 class Shape
 {
 protected:
 
-	glm::vec3 position = glm::vec3(0, 0, 0);
-	glm::vec3 rotation = glm::vec3(0, 0, 0);
-	glm::vec3 scale = glm::vec3(1, 1, 1);
+	vec3 position = vec3(0, 0, 0);
+	vec3 rotation = vec3(0, 0, 0);
+	vec3 scale = vec3(1, 1, 1);
 
 	//float colorX;
 	//float colorY;
@@ -25,17 +26,17 @@ public:
 	virtual void Bind() = 0;
 	virtual int GetVertexCount() = 0;
 
-	glm::vec3 GetPosition();
-	glm::vec3 GetRotation();
-	glm::vec3 GetScale();
+	vec3 GetPosition();
+	vec3 GetRotation();
+	vec3 GetScale();
 
 	int GetID();
 
-	void Move(glm::vec3 v);
-	void Rotate(glm::vec3 v); 
-	//void Rotate(glm::vec3 v, float angle) //do this 
-	void Scale(glm::vec3 v);
+	void Move(vec3 v);
+	void Rotate(vec3 v); 
+	//void Rotate(vec3 v, float angle) //do this 
+	void Scale(vec3 v);
 
-	static glm::mat4 GetObjectMatrix(Shape* object);
+	static mat4 GetObjectMatrix(Shape* object);
 
 };
