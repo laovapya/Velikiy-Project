@@ -56,6 +56,68 @@ inline float radians(float deg) {
     return deg * static_cast<float>(M_PI) / 180.0f;
 }
 
+class vec4 {
+public:
+    float a, b, c, d;
+
+    vec4(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
+
+    float& operator[](int i) {
+        if (i == 0) return a;
+        else if (i == 1) return b;
+        else if (i == 2) return c;
+        else if (i == 3) return d;
+        throw std::out_of_range("Index out of range");
+    }
+
+    const float& operator[](int i) const {
+        if (i == 0) return a;
+        else if (i == 1) return b;
+        else if (i == 2) return c;
+        else if (i == 3) return d;
+        throw std::out_of_range("Index out of range");
+    }
+
+    vec4 operator-(const vec4& v) const {
+        return vec4(a - v.a, b - v.b, c - v.c, d - v.d);
+    }
+
+    vec4 operator+(const vec4& v) const {
+        return vec4(a + v.a, b + v.b, c + v.c, d + v.d);
+    }
+
+    vec4 operator*(float sc) const {
+        return vec4(a * sc, b * sc, c * sc, d * sc);
+    }
+
+    vec4 operator/(float sc) const {
+        if (sc != 0.0f) {
+            float sc2 = 1.0f / sc;
+            return vec4(a * sc2, b * sc2, c * sc2, d * sc2);
+        } else {
+            throw std::invalid_argument("Division by zero");
+        }
+    }
+
+    float dot(const vec4& v) const {
+        return a * v.a + b * v.b + c * v.c + d * v.d;
+    }
+
+    float length() const {
+        return std::sqrt(a * a + b * b + c * c + d * d);
+    }
+
+    vec4 normalize() const {
+        float len = length();
+        if (len != 0.0f) {
+            float len2 = 1.0f / len;
+            return vec4(a * len2, b * len2, c * len2, d * len2);
+        } else {
+            return *this;
+        }
+    }
+};
+
 class mat4 {
 public:
     float matrix[4][4];
