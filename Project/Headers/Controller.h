@@ -1,6 +1,7 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <Glm.h>
 #include"Camera.h"
 class Controller
 {
@@ -39,7 +40,7 @@ public:
 	static bool GetTranslating();
 	static bool GetUp();
 	static bool GetDown();
-	static glm::vec3 GetTransformVector();
+	static vec3 GetTransformVector();
 
 
 	static void RegisterEvents(GLFWwindow* window) {
