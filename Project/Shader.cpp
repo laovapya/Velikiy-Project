@@ -63,7 +63,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 		std::cout << "Failed to find matrix uniform" << std::endl;
 		return;
 	}
-	colorLoc = glGetUniformLocation(ID, "color");
+	colorLoc = glGetUniformLocation(ID, "objectColor");
 	if (colorLoc == -1) {
 		std::cout << "Failed to find color uniform" << std::endl;
 		return;
@@ -73,7 +73,24 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 		std::cout << "Failed to find alpha uniform" << std::endl;
 		return;
 	}
+	projectionLoc = glGetUniformLocation(ID, "projection");
+	if (projectionLoc == -1) {
+		std::cout << "Failed to find projection uniform" << std::endl;
+		return;
+	}
+	lightColorLoc = glGetUniformLocation(ID, "lightColor");
+	if (matrixLoc == -1) {
+		std::cout << "Failed to find light color" << std::endl;
+		return;
+	}
+	lightPosLoc = glGetUniformLocation(ID, "lightPos");
+	if (matrixLoc == -1) {
+		std::cout << "Failed to find light color" << std::endl;
+		return;
+	}
 
+	SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f));
+	//SetLightColor(glm::vec3(0.4f, 0.6f, 0.3f));
 }
 
 // Activates the Shader Program
@@ -96,5 +113,12 @@ void Shader::SetColor(glm::vec3 color) {
 }
 void Shader::SetAlpha(float alpha) {
 	glUniform1f(alphaLoc, alpha);
+}
+void Shader::SetProjectionMatrix(glm::mat4 matrix) {
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+void Shader::SetLightColor(glm::vec3 color) {
+	glUniform3f(lightColorLoc, color.x, color.y, color.z);
+
 }
 //0.2f, 0.4f, 0.8f

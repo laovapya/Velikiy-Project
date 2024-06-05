@@ -2,44 +2,46 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+//Scene's camera class
 class Camera
 {
 private:
-	const float WIDTH = 800;
-	const float HEIGHT = 800; //put somewhere else
+	//up orientation
 	const glm::vec3 worldUp = glm::vec3(0, 1, 0);
 
-	Camera();
+	//base transform fields
 	glm::vec3 position;
 	glm::vec3 target;
 	
-
-	glm::mat4 projection;
+	//view matrix is a transformation matrix applied to all objects. 
+	//it is created based on camera's position and orientation.
+	//multiplying each vertex in the scene by it creates the illusion of camera movement. 
 	glm::mat4 view;
 
-	//glm::vec3 cameraRight;
-
-	//glm::vec3 rotation = glm::vec3(0, 0, 0);
-	//view angle
-	//far near planes
-	//frustum
 	float panSpeed = 10;
 	float orbitSpeed = 10;
 
-	const float zoomPanCoefficient = 0.125f;
-	
+	//camera's coordinate system
+	glm::vec3 right;
+	glm::vec3 up;
+	glm::vec3 forward;
 public:
-	Camera(const Camera&) = delete;
-	static Camera& GetInstance() {
-		static Camera instance;
-		return instance;
-	}
-	static glm::mat4 GetViewMatrix();
-	static glm::mat4 GetProjectionMatrix();
-	static void Pan(glm::vec3);
+	Camera();
+	
 
+	glm::mat4 GetViewMatrix();
+
+	//functionality to move the camera along its XY plane
+	void Pan(glm::vec3);
+	//functionality to orbit the camera around its target (starts at 0,0,0) 
 	void Orbit(glm::vec3 angle);
 
+	
+
+	glm::vec3 GetRight();
+	glm::vec3 GetUp();
+	glm::vec3 GetForward();
 };
 
 

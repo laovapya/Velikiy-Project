@@ -19,31 +19,46 @@ void UI::DrawObjectMenu() {
     if (ImGui::Begin("Component menu", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
 
         ImGui::SetCursorPos(ImVec2(xOffset + xDistance * 0, yOffset));
-        if (ImGui::Button("Create cube", size)) {
+        if (ImGui::Button("cube", size)) {
             int id = scene->GetObjectManager()->AddCube();
             //const char* name = ("cube" + char(cubeCount++));
             std::string name = "cube" + std::to_string(cubeCount++);
 
-            ListedObject item(false, id, name);
+            ListedObject item(false, id, name, Shape::Shapes::cube);
 
             AddItem(item);
+
         }
 
 
 
         ImGui::SetCursorPos(ImVec2(xOffset + xDistance * 1, yOffset));
-        if (ImGui::Button("Create cylinder", size)) { 
+        if (ImGui::Button("cylinder", size)) { 
             int id = scene->GetObjectManager()->AddCylinder();
             std::string name = "cylinder" + std::to_string(cylinderCount++);
-            ListedObject item(false, id, name);
+
+   
+            ListedObject item(false, id, name, Shape::Shapes::cylinder);
 
             AddItem(item);
         }
         ImGui::SetCursorPos(ImVec2(xOffset + xDistance * 2, yOffset));
-        if (ImGui::Button("Create cone", size)) {
+        if (ImGui::Button("cone", size)) {
             int id = scene->GetObjectManager()->AddCone();
             std::string name = "cone" + std::to_string(coneCount++);
-            ListedObject item(false, id, name);
+
+           
+            ListedObject item(false, id, name, Shape::Shapes::cone);
+           
+            AddItem(item);
+        }
+        ImGui::SetCursorPos(ImVec2(xOffset + xDistance * 3, yOffset));
+        if (ImGui::Button("sphere", size)) {
+            int id = scene->GetObjectManager()->AddSphere();
+            std::string name = "sphere" + std::to_string(sphereCount++);
+
+
+            ListedObject item(false, id, name, Shape::Shapes::sphere);
 
             AddItem(item);
         }
@@ -62,13 +77,13 @@ void UI::DrawObjectList() {
       
         ImVec2 vec(0, 0);
         
-        if (ImGui::BeginListBox("   0", ImVec2(-FLT_MIN, 25 * ImGui::GetTextLineHeightWithSpacing())))
+        if (ImGui::BeginListBox("   0", ImVec2(-FLT_MIN, objectListMenuHeight * ImGui::GetTextLineHeightWithSpacing())))
         {
             for (int i = 0; i < maxObjectCount; i++)
             {
                 if (items[i].id == -1)
                     continue;
-
+              
                 if (!ImGui::Selectable(items[i].name.c_str(), items[i].isSelected))
                     continue;
                     
@@ -94,25 +109,36 @@ void UI::DrawObjectList() {
         }
     }
     ImGui::End();
-
-    if (ImGui::IsKeyPressed(ImGuiKey_Delete)) {
-        for (int i = 0; i < maxObjectCount; ++i) {
-            if (!items[i].isSelected)
-                continue;
-            scene->GetObjectManager()->RemoveObject(items[i].id);
-            items[i] = ListedObject();
-            currentCount--;
-        }
-        ReInitItems();
-    }
+    
 }
+void UI::DeleteItems() {
+    for (int i = 0; i < maxObjectCount; ++i) {
+        if (!items[i].isSelected)
+            continue;
+        scene->GetObjectManager()->RemoveObject(items[i].id);
 
+        if (items[i].shape == Shape::Shapes::cube) 
+            cubeCount--; 
+        if (items[i].shape == Shape::Shapes::cone) 
+            coneCount--;
+        if (items[i].shape == Shape::Shapes::cylinder) 
+            cylinderCount--;
+        if (items[i].shape == Shape::Shapes::sphere)
+            sphereCount--;
+        
+
+        items[i] = ListedObject();
+        currentCount--;
+    }
+    ReInitItems();
+}
 
 void UI::DrawTransformMenu() {
     
     ImGui::SetNextWindowSize(scene->GetWindow()->GetWidget3Dimensions());
     if (ImGui::Begin("Transform menu", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse)) {
         //ImVec4 v(0,0, 0, 0);
+        ImGui::Text("       X              Y               Z");
         float max = 10;
         ImGui::SliderFloat3("Translate", positionBuffer, -max, max);
 
@@ -144,13 +170,24 @@ void UI::DrawTransformMenu() {
             scaleBuffer[2] = 0;
         }
     }
-    ImGui::Text("Mouse inputs");
+   
+    if (ImGui::Button("Delete", ImVec2(100, 20)) || ImGui::IsKeyPressed(ImGuiKey_Delete)) {
+        DeleteItems();
+    }
 
     Controller& instance = Controller::GetInstance();
+
+    /*float xOffset = 50;
+    float yOffset = 300;
+    float xDistance = 180;*/
+
+    ImGui::SetCursorPos(ImVec2(5, 120));
+
+    ImGui::Text("Mouse controls");
     ImGui::Checkbox("X", &instance.isXaxisEnabled);
-  
+    //ImGui::SetCursorPos(ImVec2(xOffset + xDistance * 1, yOffset));
     ImGui::Checkbox("Y", &instance.isYaxisEnabled);
-   
+    //ImGui::SetCursorPos(ImVec2(xOffset + xDistance * 2, yOffset));
     ImGui::Checkbox("Z", &instance.isZaxisEnabled);
 
 
@@ -172,24 +209,24 @@ void UI::DrawTransformMenu() {
 
     ImGui::End();
 
-
-
-
-
-
-
-
 }
 
-
-
-void UI::AddItem(ListedObject object) {
+void UI::AddItem(ListedObject& item) {
     if (currentCount >= maxObjectCount) {
         std::cout << "max count reached" << std::endl;
         return;
     }
-    items[currentCount] = object;
+    item.isSelected = true;
+    items[currentCount] = item;
     currentCount++;
+
+    scene->GetObjectManager()->SelectObject(item.id);
+    for (int i = 0; i < maxObjectCount; ++i) {
+        if (items[i].id == item.id)
+            continue;
+        scene->GetObjectManager()->DeselectObject(items[i].id);
+        items[i].isSelected = false;
+    }
 }
 
 void UI::ReInitItems() {

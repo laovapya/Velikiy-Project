@@ -3,18 +3,24 @@
 #include"EBO.h"
 #include"math.h"
 
-const double pi = 3.14159265358979323846;
+#include<vector>
+
+#include<iostream>
+
+
+const float pi = 3.14159265358979323846;
 float DegToRad(float angle) {
 	return angle * pi / 180;
 }
+float VertexData::degToRad = pi / 180;
 //float  VertexData::cubeVertices[36];
 //float  VertexData::cubeIndices[12];
 //VAO  VertexData::cubeVAO;
 //const int VertexData::CUBE_VERTEX_COUNT = 36;
 //const int VertexData::CUBE_INDEX_COUNT = 12;
 VertexData::VertexData() {
-	if (polygonAmount < 5) polygonAmount = 5;
-	if (polygonAmount > 40) polygonAmount = 40;
+	if (polygonAmount < 1) polygonAmount = 1;
+	if (polygonAmount > 10) polygonAmount = 10;
 	SetCubeVAO();
 	SetConeVAO();
 	SetCylinderVAO();
@@ -62,11 +68,12 @@ void VertexData::SetCubeVAO() {
 	VBO VBO1(vertices, sizeof(vertices));
 	EBO EBO1(indices, sizeof(indices));
 	cubeVAO.Link(VBO1, EBO1);
+	
 }
 
 void VertexData::SetConeVAO() {
 	int angle = (int)(360 / (360 / (100 / polygonAmount))); 
-	float vertices[3 * 2 + 3 * 360 / 10]; //polygonAmount max = 1 => min angle = 10
+	float vertices[coneVertexCount]; //polygonAmount max = 1 => min angle = 10
 	int triangleCount = 360 / angle;
 	vertices[0] = 0;
 	vertices[1] = 0.5f;
@@ -79,7 +86,7 @@ void VertexData::SetConeVAO() {
 		vertices[j + 1] = -0.5f;
 		vertices[j + 2] = 0.5f * sin(DegToRad(i));
 	}
-	int indices[(360 / 10) * 3 * 2]; //polygonAmount max = 1 => min angle = 10
+	int indices[coneIndexCount]; //polygonAmount max = 1 => min angle = 10
 	int size = triangleCount * 3 * 2;
 	for (int i = 0, j = 2; i < size / 2; ++i) {
 		if (i % 3 == 0) {
@@ -101,7 +108,7 @@ void VertexData::SetConeVAO() {
 
 void VertexData::SetCylinderVAO() {
 	int angle = (int)(360 / (360 / (100 / polygonAmount))); 
-	float vertices[3 * 2 + 2 * 3 * 360 / 10]; //polygonAmount max = 1 => min angle = 10
+	float vertices[cylinderVertexCount]; 
 	int planeTriangleCount = 360 / angle;
 	vertices[0] = 0;
 	vertices[1] = -0.5f;
@@ -119,7 +126,7 @@ void VertexData::SetCylinderVAO() {
 	}
 
 	//planes
-	int indices[4 * (360 / 10) * 3]; //polygonAmount max = 1 => min angle = 10
+	int indices[cylinderIndexCount]; 
 	int size = planeTriangleCount * 3 * 2;
 	for (int i = 0, j = 2; i < size / 2; ++i) {
 		if (i % 3 == 0) {
@@ -153,12 +160,57 @@ void VertexData::SetCylinderVAO() {
 }
 
 
-void VertexData::SetSphereVAO()
-{
 
+void VertexData::SetSphereVAO() {
+	int stacks = 15;
+	int slices = 15;
+	float radius = 0.5f;
+	const float PI = 3.14f;
+
+	std::vector<float> positions;
+	std::vector<int> indices;
+
+	// loop through stacks.
+	for (int i = 0; i <= stacks; ++i) {
+
+		float V = (float)i / (float)stacks;
+		float phi = V * PI;
+
+		// loop through the slices.
+		for (int j = 0; j <= slices; ++j) {
+
+			float U = (float)j / (float)slices;
+			float theta = U * (PI * 2);
+
+			// use spherical coordinates to calculate the positions.
+			float x = radius * cos(theta) * sin(phi);
+			float y = radius * cos(phi);
+			float z = radius * sin(theta) * sin(phi);
+
+			positions.push_back(x);
+			positions.push_back(y);
+			positions.push_back(z);
+		}
+	}
+
+	// Calc The Index Positions
+	for (int i = 0; i < slices * stacks + slices; ++i) {
+		indices.push_back(int(i));
+		indices.push_back(int(i + slices + 1));
+		indices.push_back(int(i + slices));
+
+		indices.push_back(int(i + slices + 1));
+		indices.push_back(int(i));
+		indices.push_back(int(i + 1));
+	}
+
+
+
+	VBO VBO2(positions.data(), sizeof(float) * positions.size());
+	EBO EBO2(indices.data(), sizeof(int) * indices.size());
+	sphereVAO.Link(VBO2, EBO2);
 }
 
-#define max_grid_size 2 * 3 * 2 * 250
 
 void VertexData::SetGridVAO() { //move to another class
 	const float length = 9999;
@@ -214,6 +266,22 @@ VAO VertexData::GetZVAO() {
 VAO VertexData::GetGridVAO() {
 	return GetInstance().grid;
 }
-int VertexData::GetGridSize() {
+int VertexData::GetGridIndexCount() {
 	return max_grid_size;
 }
+
+
+int VertexData::GetCubeIndexCount() {
+	return 36;
+}
+int VertexData::GetConeIndexCount() {
+	return (360 / 10) * 3 * 2; // coneIndexCount  (360 / 10) * 3 * 2
+}
+int VertexData::GetCylinderIndexCount() {
+	return 4 * (360 / 10) * 3; // cylinderIndexCount 4 * (360 / 10) * 3
+}
+int VertexData::GetSphereIndexCount() {
+	return 2400;
+}
+
+

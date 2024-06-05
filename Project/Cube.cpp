@@ -1,14 +1,20 @@
 #include "Cube.h"
 #include"VertexData.h"
 
-Cube::Cube() {
+Cube::Cube() : Shape() {
 	
+	indexCount = VertexData::GetCubeIndexCount();
+	shape = cube;
 }
 
-void Cube::Bind() {
-	VertexData::GetCubeVAO().Bind();
-}
+//void Cube::Bind() {
+//	VertexData::GetCubeVAO().Bind();
+//}
 
-int Cube::GetVertexCount() {
-	return 36;
+//int Cube::GetVertexCount() {
+//	return vertexCount;
+//}
+
+VAO Cube::GetVAO() {
+	return VertexData::GetCubeVAO();
 }

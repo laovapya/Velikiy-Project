@@ -1,15 +1,13 @@
 #include "Cone.h"
 #include"VertexData.h"
-Cone::Cone() {
-
+Cone::Cone() : Shape() {
+	
+	indexCount = VertexData::GetConeIndexCount();
+	shape = cone;
 }
 
 
-
-void Cone::Bind() {
-	VertexData::GetConeVAO().Bind();
+VAO Cone::GetVAO() {
+	return VertexData::GetConeVAO();
 }
 
-int Cone::GetVertexCount() {
-	return (360 / 10) * 3 * 2;
-}

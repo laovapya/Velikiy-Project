@@ -1,41 +1,52 @@
 #include <iostream>
 
-#include"Shape.h"
+#pragma commment(lib,"opengl32.lib") 
+
+
+#include<vector>;
+
 #include"Cube.h"
-#include"Cone.h"
-#include"Cylinder.h"
-#include"Sphere.h"
-
-#include"ObjectManager.h"
-#include"SceneRenderer.h"
+#include"Window.h"
+#include"Scene.h"
 #include"DeltaTime.h"
-
+#include"UI.h"
 void DisplayKeys();
+
+
+
 
 
 int main()
 {
-	DisplayKeys();
-    Cube cube;
-    Cone cone;
-    Cylinder cyl;
+	DisplayKeys(); 
 
-    ObjectManager::GetInstance().AddObject(&cube);
-    ObjectManager::GetInstance().AddObject(&cone);
-    ObjectManager::GetInstance().AddObject(&cyl);
+    Window window;
+    ObjectManager manager;
+    Scene scene(&window);
+    UI ui(&scene);
 
-    cone.Move(glm::vec3(3, -2, 1));
-    cyl.Move(glm::vec3(-6, 1, 4));
 
-    ObjectManager::GetInstance().SelectObject(cube.GetID());
-    //ObjectManager::GetInstance().SelectObject(cone.GetID());
-    //ObjectManager::GetInstance().SelectObject(cyl.GetID());
 
-    Scene scene;
+    ////imgui stuff
+    //ImVec4 color = ImVec4(0.25f, 0.25f, 0.25f, 1); //darker grey
+    //ImGuiStyle& style = ImGui::GetStyle();
+    //style.Colors[ImGuiCol_WindowBg] = color;
+    //style.Colors[ImGuiCol_MenuBarBg] = color;
+
     while (true) { //main loop
         DeltaTime::SetDeltaTime(glfwGetTime());
+        window.EarlyUpdate();
+
+
+        ui.DrawObjectList();
+        ui.DrawObjectMenu();
+        ui.DrawTransformMenu();
+
+
         scene.Update();
-        if (scene.GetShouldClose())
+        window.LateUpdate();
+
+        if (window.GetShouldClose()) 
             break;
     }
     return 0;
@@ -45,16 +56,16 @@ void DisplayKeys() {
     std::cout << " Translate G" << std::endl;
     std::cout << " Rotate R" << std::endl;
     std::cout << " Scale S" << std::endl;
+
     std::cout << " X Axis - X" << std::endl;
     std::cout << " Y Axis - Y" << std::endl;
     std::cout << " Z Axis - Z" << std::endl;
-    std::cout << " UP 9 " << std::endl;
-    std::cout << " DOWN 0 " << std::endl;
-    std::cout << " RESET 1" << std::endl;
-    std::cout << " Camera movement - Arrow keys" << std::endl;
+
     std::cout << " Zoom + -" << std::endl;
     std::cout << " Pan P + Mouse" << std::endl;
     std::cout << " Orbit O + Mouse" << std::endl;
+
+    std::cout << " Transform object - Mouse" << std::endl;
 }
 
 

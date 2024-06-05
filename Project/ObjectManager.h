@@ -1,29 +1,44 @@
 #pragma once
 #include"Shape.h"
+#include"Cube.h"
+#include"Cone.h"
+#include"Cylinder.h"
+#include"Sphere.h"
 #include<vector>
-class ObjectManager 
+
+//defining max amount of objects in the scene
+#define maxCount 32
+
+//this class manages the container with all created objects.
+//it has functionality to add, remove, select, deselect objects.
+class ObjectManager
 {
 private:
+	//current object amount
 	int objectCount = 0;
-	const int COUNT = 32;
+
+	const int COUNT = maxCount;
+	//The scene's objects container
+	//This is a pointers container. The objects themselves are stored in the heap and deleted in destructor and RemoveObject()
 	std::vector<Shape*> createdObjects;
-	std::vector<Shape*> selectedObjects;
-	ObjectManager();
+
 public:
-	ObjectManager(const ObjectManager&) = delete;
-	static ObjectManager& GetInstance() {
-		static ObjectManager instance;
-		return instance;
-	}
+	ObjectManager();
+	~ObjectManager();
 
+	//Adding new objects
+	int AddCube();
+	int AddCone();
+	int AddCylinder();
+	int AddSphere();
 
-	void AddObject(Shape* object); //make these statics?
+	void AddObject(Shape* object);
 	void RemoveObject(int id);
+
+	//Selecting objects 
 	void SelectObject(int id);
 	void DeselectObject(int id);
 
-	static std::vector<Shape*> GetCreatedObjects();
-	static std::vector<Shape*> GetSelectedObjects();
-
+	std::vector<Shape*> GetCreatedObjects();
 };
 

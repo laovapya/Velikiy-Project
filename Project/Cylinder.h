@@ -3,10 +3,8 @@
 #include"VertexData.h"
 class Cylinder : public Shape
 {
-	using Shape::Shape;
 public:
-
-	int GetVertexCount();
-	virtual void Bind();
+	Cylinder();
+	VAO GetVAO() override;
 };
 

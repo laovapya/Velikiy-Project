@@ -9,12 +9,12 @@ Window::Window() {
 	CreateWindow();
 	InitGlad();
 	SetWindowParameters();
-	RegisterEvents();
 	UseShaders();
 
+	RegisterEvents();
+
 	InitImGui();
-	
-	
+
 }
 Window::~Window() {
 	shaderProgram.Delete();
@@ -38,7 +38,7 @@ void Window::CreateWindow() {
 	window = glfwCreateWindow(width, height, appName, NULL, NULL);
 	if (window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		//std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return;
 	}
@@ -49,13 +49,12 @@ void Window::CreateWindow() {
 void Window::InitGlad() {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		//std::cout << "Failed to initialize GLAD" << std::endl;
 		return;
 	}
 }
 
 void Window::SetWindowParameters() {
-
 	glViewport(lowerLeft.x, lowerLeft.y, upperRight.x, upperRight.y);
 
 	glEnable(GL_BLEND);
@@ -75,6 +74,9 @@ void Window::RegisterEvents() {
 void Window::UseShaders() {
 	shaderProgram = Shader("default.vert", "default.frag");
 	shaderProgram.Activate();
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), Window::GetAspectRatio(), 0.1f, 100.0f);
+	shaderProgram.SetProjectionMatrix(projection);
+	shaderProgram.SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void Window::InitImGui() {
@@ -100,14 +102,11 @@ void Window::InitImGui() {
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	//aspectRatio = ((upperRight.x - lowerLeft.x) * width) / ((upperRight.y - lowerLeft.y) * height);
-	
-	//lowerLeft = glm::vec2(yDownOffset, 0);
 	upperRight = glm::vec2(width - XRightOffset, height);
 	aspectRatio = ((upperRight.x - lowerLeft.x)) / ((upperRight.y));
 	glViewport(lowerLeft.x, lowerLeft.y, upperRight.x, upperRight.y);
-	Camera::SetProjectionMatrix();
-	//std::cout << "aspect ratio " <<aspectRatio << std::endl;
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), Window::GetAspectRatio(), 0.1f, 100.0f);
+	shaderProgram.SetProjectionMatrix(projection);
 }
 
 
@@ -167,18 +166,6 @@ float Window::GetAspectRatio() {
 	return aspectRatio;
 }
 
-float Window::width = 2000;
-float Window::height = 1200;
-
-//glm::vec2 Scene::lowerLeft = glm::vec2(0, 400);
-//glm::vec2 Scene::upperRight = glm::vec2(width - 400, height);
-float Window::yDownOffset = 200;
-float Window::XRightOffset = 500;
-
-glm::vec2 Window::lowerLeft = glm::vec2(0, yDownOffset);
-glm::vec2 Window::upperRight = glm::vec2(width - XRightOffset, height);
-
-float Window::aspectRatio = ((upperRight.x - lowerLeft.x)) / ((upperRight.y));
 
 
 
@@ -273,3 +260,20 @@ ImVec2 Window::GetWidget2Dimensions() {
 ImVec2 Window::GetWidget3Dimensions() {
 	return ImVec2(XRightOffset, height * 0.6f);
 }
+
+
+
+float Window::width = 2000;
+float Window::height = 1200;
+
+
+float Window::yDownOffset = 200;
+float Window::XRightOffset = 500;
+
+glm::vec2 Window::lowerLeft = glm::vec2(0, yDownOffset);
+glm::vec2 Window::upperRight = glm::vec2(width - XRightOffset, height);
+
+float Window::aspectRatio = ((upperRight.x - lowerLeft.x)) / ((upperRight.y));
+
+
+Shader Window::shaderProgram = Shader();

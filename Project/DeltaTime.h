@@ -1,4 +1,5 @@
 #pragma once
+//used to get the value between frames for smoother rendering.
 class DeltaTime {
 private:
     DeltaTime();

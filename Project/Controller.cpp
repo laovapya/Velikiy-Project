@@ -1,6 +1,6 @@
 #include "Controller.h"
 #include"DeltaTime.h"
-
+#include<iostream>> //remove
 Controller::Controller() {
 
 }
@@ -27,15 +27,9 @@ void Controller::SwitchState(GLFWwindow* window, int key, int scancode, int acti
 
     //-------------
 
-    if (key == GLFW_KEY_9 && action == GLFW_PRESS)
-        instance.isTransformingUp = true;
-    if (key == GLFW_KEY_0 && action == GLFW_PRESS)
-        instance.isTransformingDown = true;
 
-    if (key == GLFW_KEY_9 && action == GLFW_RELEASE)
-        instance.isTransformingUp = false;
-    if (key == GLFW_KEY_0 && action == GLFW_RELEASE)
-        instance.isTransformingDown = false;
+
+
 
     //--------
 
@@ -54,39 +48,43 @@ void Controller::SwitchState(GLFWwindow* window, int key, int scancode, int acti
     }
 
     //--------------------
-
+ 
     
 }
 void Controller::MouseCallback(GLFWwindow* window, double xpos, double ypos) {
-    GetInstance().mouseXoffset = xpos - GetInstance().mouseLastX;
-    GetInstance().mouseYoffset = GetInstance().mouseLastY - ypos; // reversed since y-coordinates range from bottom to top
-    GetInstance().mouseLastX = xpos;
-    GetInstance().mouseLastY = ypos;
+    Controller& instance = Controller::GetInstance();
+    instance.mouseXoffset = xpos - instance.mouseLastX;
+    instance.mouseYoffset = instance.mouseLastY - ypos; // reversed since y-coordinates range from bottom to top
+    instance.mouseLastX = xpos;
+    instance.mouseLastY = ypos;
+    
+    instance.mouseXoffset *= instance.mouseSensitivity;
+    instance.mouseYoffset *= instance.mouseSensitivity;
+   
+    //std::cout << "x " << instance.mouseXoffset << " y " << instance.mouseYoffset << std::endl;
 
-    GetInstance().mouseXoffset *= GetInstance().mouseSensitivity;
-    GetInstance().mouseYoffset *= GetInstance().mouseSensitivity;
 
-    GetInstance().mouseYaw += GetInstance().mouseXoffset;
+   /* GetInstance().mouseYaw += GetInstance().mouseXoffset;
     GetInstance().mousePitch += GetInstance().mouseYoffset;
 
     if (GetInstance().mousePitch > 89.0f)
         GetInstance().mousePitch = 89.0f;
     if (GetInstance().mousePitch < -89.0f)
-        GetInstance().mousePitch = -89.0f;
+        GetInstance().mousePitch = -89.0f;*/
 }
 
 
 
 
-bool Controller::GetX() {
-	return GetInstance().isXaxisEnabled;
-}
-bool Controller::GetY() {
-	return GetInstance().isYaxisEnabled;
-}
-bool Controller::GetZ() {
-	return GetInstance().isZaxisEnabled;
-}
+//bool Controller::GetX() {
+//	return GetInstance().isXaxisEnabled;
+//}
+//bool Controller::GetY() {
+//	return GetInstance().isYaxisEnabled;
+//}
+//bool Controller::GetZ() {
+//	return GetInstance().isZaxisEnabled;
+//}
 bool Controller::GetScaling() {
 	return GetInstance().isScaling;
 }
@@ -96,58 +94,54 @@ bool Controller::GetRotating() {
 bool Controller::GetTranslating() {
 	return GetInstance().isTranslating;
 }
-bool Controller::GetUp() {
-	return GetInstance().isTransformingUp;
-}
-bool Controller::GetDown() {
-	return GetInstance().isTransformingDown;
-}
+//bool Controller::GetUp() {
+//	return GetInstance().isTransformingUp;
+//}
+//bool Controller::GetDown() {
+//	return GetInstance().isTransformingDown;
+//}
 
-glm::vec3 Controller::GetTransformVector() {
-    int multiplier = 1;
+glm::vec3 Controller::GetTransformVector(Camera& camera) {
     glm::vec3 v(0, 0, 0);
+    Controller& instance = Controller::GetInstance();
 
-    if (GetInstance().isTransformingUp)
-        ;
-    else if (GetInstance().isTransformingDown)
-        multiplier = -1;
-    else
-        return v;
-  
-    if (GetInstance().isXaxisEnabled)
-        v += glm::vec3(1, 0, 0);
-    if (GetInstance().isYaxisEnabled)
-        v += glm::vec3(0, 1, 0);
-    if (GetInstance().isZaxisEnabled)
-        v += glm::vec3(0, 0, 1);
-    v *= multiplier;
-
-    return v * GetInstance().speed;
+    glm::vec3 mouseVector = camera.GetRight() * instance.mouseXoffset + camera.GetUp() * instance.mouseYoffset;
+    if (instance.isXaxisEnabled) 
+        v += mouseVector.x * glm::vec3(1, 0, 0);
+    
+    if (instance.isYaxisEnabled) 
+        v += mouseVector.y * glm::vec3(0, 1, 0);
+    
+    if (instance.isZaxisEnabled) 
+        v += mouseVector.z * glm::vec3(0, 0, 1);
+    
+    return v  * -1.0f * instance.mouseSpeed;
 }
 
-void Controller::MoveCamera(GLFWwindow* window) {
+void Controller::MoveCamera(GLFWwindow* window, Camera& camera) {
+    
     Controller& instance = GetInstance();
-    /*if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        Camera::Pan(glm::vec3(1, 0, 0) * instance.speed * DeltaTime::GetDeltaTime());
-    }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        Camera::Pan(glm::vec3(-1, 0, 0) * instance.speed * DeltaTime::GetDeltaTime());
-    }
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        Camera::Pan(glm::vec3(0, -1, 0) * instance.speed * DeltaTime::GetDeltaTime());
-    }*/
+
+    
+
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        Camera::Pan(glm::vec3(GetInstance().mouseXoffset, GetInstance().mouseYoffset, 0) * DeltaTime::GetDeltaTime());
+        camera.Pan(glm::vec3(GetInstance().mouseXoffset, GetInstance().mouseYoffset, 0) * DeltaTime::GetDeltaTime());
     }
     if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS) {
-        Camera::Pan(glm::vec3(0, 0, 1) * instance.speed * DeltaTime::GetDeltaTime());
+        camera.Pan(glm::vec3(0, 0, 1) * instance.zoomSpeed * DeltaTime::GetDeltaTime());
     }
     if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS) {
-        Camera::Pan(glm::vec3(0, 0, -1) * instance.speed * DeltaTime::GetDeltaTime());
+        camera.Pan(glm::vec3(0, 0, -1) * instance.zoomSpeed * DeltaTime::GetDeltaTime());
     }
     if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-        Camera::GetInstance().Orbit(-glm::vec3(GetInstance().mouseYoffset, GetInstance().mouseXoffset, 0) * DeltaTime::GetDeltaTime());
+        camera.Orbit(-glm::vec3(GetInstance().mouseYoffset, GetInstance().mouseXoffset, 0) * DeltaTime::GetDeltaTime());
     }
 }
 
+void Controller::ResetMouse() {
+    Controller& instance = GetInstance();
+
+    instance.mouseXoffset = 0;
+    instance.mouseYoffset = 0;
+}
 

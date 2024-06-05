@@ -1,8 +1,16 @@
 #include "Cylinder.h"
-int Cylinder::GetVertexCount() {
-	return 4 * (360 / 10) * 3;
-}
+Cylinder::Cylinder() : Shape() {
 
-void Cylinder::Bind() {
-	VertexData::GetCylinderVAO().Bind();
+	indexCount = VertexData::GetCylinderIndexCount();
+	shape = cylinder;
+}
+//int Cylinder::GetVertexCount() {
+//	return vertexCount;
+//}
+
+//void Cylinder::Bind() {
+//	VertexData::GetCylinderVAO().Bind();
+//}
+VAO Cylinder::GetVAO() {
+	return VertexData::GetCylinderVAO();
 }

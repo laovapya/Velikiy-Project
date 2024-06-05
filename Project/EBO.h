@@ -1,18 +1,18 @@
 #pragma once
 #include<glad/glad.h>
 
+//element buffer object is used by openGL to bind indices and related information.
 class EBO
 {
 public:
-	// ID reference of Elements Buffer Object
+
 	GLuint ID;
-	// Constructor that generates a Elements Buffer Object and links it to indices
+
 	EBO(int* indices, GLsizeiptr size);
 
-	// Binds the EBO
 	void Bind();
-	// Unbinds the EBO
+
 	void Unbind();
-	// Deletes the EBO
+
 	void Delete();
 };
