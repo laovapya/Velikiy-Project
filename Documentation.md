@@ -25,14 +25,14 @@ scaling
 
 ![image](https://github.com/laovapya/Velikiy-Project/blob/main/form.jpg)
 
-The UI includes the following components 
-    1. Scene 
+The UI includes the following components:
+    1) Scene 
 Here, the created objects and changes applied to them are displayed in real time.  
-    2. Shape choice menu 
+    2) Shape choice menu 
 A list of icons representing basic 3D shapes. Clicking on one creates a new object. 
-    3.  Collection
+    3)  Collection
 A list of names of all created objects. It is used to select an object for transformations. 
-    4. Transformations menu
+    4) Transformations menu
 Used to select and apply the transformations (moving, rotating, scaling) and their axes. It is possible to use multiple at once. Has a button to delete an object. 
 
 ## Technologies and Frameworks
