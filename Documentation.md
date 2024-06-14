@@ -54,7 +54,8 @@ Used to select and apply the transformations (moving, rotating, scaling) and the
   2) Git: version control system
   3) CMake: build system
 
-
+## More details:
+    https://v-ostrovskaya.github.io/12345/
 
 
 
