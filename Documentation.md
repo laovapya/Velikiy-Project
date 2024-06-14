@@ -1,8 +1,8 @@
-#Technical specification
+# Technical specifications
 
-##Name: online cinema YES IT IS A CINEMA SENYA SHUT UP
+## Name. Basic 3D Editor
 
-##Description
+## Description
 
 Our application is used to build simple 3D environments. 
 The user is able to create primitive 3D objects, such as cubes, spheres and cylinders to then apply transformative operations on them: moving, rotating and scaling, constructing various structures this way.
