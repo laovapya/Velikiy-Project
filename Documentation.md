@@ -43,7 +43,7 @@ A list of icons representing basic 3D shapes. Clicking on one creates a new obje
 A list of names of all created objects. It is used to select an object for transformations. 
 
     4) Transformations menu
-Used to select and apply the transformations (moving, rotating, scaling) and their axes. It is possible to use multiple at once. Has a button to delete an object. 
+Used to select and apply the transformations (moving, rotating, scaling) and their axes. It is possible to use multiple at once. Has a reset button. 
 
 ## Technologies and Frameworks
   1) ImGui for UI
