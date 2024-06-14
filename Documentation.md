@@ -47,7 +47,7 @@ Used to select and apply the transformations (moving, rotating, scaling) and the
 
 ## Technologies and Frameworks
   1) ImGui for UI
-  2) API Integration: OpenGL for 3D objects rendering
+  2) External libraries: OpenGL for 3D objects rendering
 
 ## Development Tools
   1) VS code: integrated development environment
