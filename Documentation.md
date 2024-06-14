@@ -12,9 +12,9 @@ The user is able to create primitive 3D objects, such as cubes, spheres and cyli
 the user must be able to:
 
 1) create primitive 3D objects:
-  a. cubes
-  b. spheres
-  c. cylinders
+cubes
+spheres
+cylinders
 
 3) apply transformative operations on them
 moving
