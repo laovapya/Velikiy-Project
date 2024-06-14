@@ -1,13 +1,13 @@
-##Technical specification
+#Technical specification
 
-#Name: online cinema YES IT IS A CINEMA SENYA SHUT UP
+##Name: online cinema YES IT IS A CINEMA SENYA SHUT UP
 
-#Description
+##Description
 
 Our application is used to build simple 3D environments. 
 The user is able to create primitive 3D objects, such as cubes, spheres and cylinders to then apply transformative operations on them: moving, rotating and scaling, constructing various structures this way.
 
-#Functional requirements
+##Functional requirements
 
 the user must be able to:
 
@@ -21,16 +21,16 @@ the user must be able to:
 #rotating#
 #scaling#
 
-#User Interface#
+##User Interface
 
 ![image](https://github.com/laovapya/Velikiy-Project/blob/main/form.jpg)
 
-#Technologies and Frameworks
+##Technologies and Frameworks
 
 #ImGui for UI#
 #API Integration: OpenGL for 3D objects will be rendering#
  
-#Development Tools
+##Development Tools
 
 #VS code: integrated development environment
 #Git: version control system#
